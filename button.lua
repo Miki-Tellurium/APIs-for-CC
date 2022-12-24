@@ -3,11 +3,11 @@
 local expect = require("cc.expect")
 local expect = expect.expect
 
-local dTextColor = colors.black         --default button text color
-local dActBackColor = colors.green      --default background color when active
-local dInactBackColor = colors.red      --default background color when inactive
-local dDisBackColor = colors.lightGray  --default background color when disabled
-local dBlinkColor = colors.yellow       --default blink color
+local defaultTextColor = colors.black
+local defaultActiveBackgroundColor = colors.green
+local defaultInactiveBackgroundColor = colors.red
+local defaultDisabledBackgroundColor = colors.lightGray
+local defaultBlinkColor = colors.yellow
 active = "active"
 inactive = "inactive"
 disabled = "disabled"
@@ -20,19 +20,19 @@ disabled = "disabled"
 --- add functions to it.
 ---@class button
 button = {
-    label = "button",               --text displayed on the button
-    width = 0,                      --width of the button (can't be smaller then the button)
-    x = 1,                          --x coordinate
-    y = 1,                          --y coordinate
-    actTColor = dTextColor,         --text color when active
-    inactTColor = dTextColor,       --text color when inactive
-    disTColor = dTextColor,         --text color when disabled
-    actBColor = dActBackColor,      --background color when active
-    inactBColor = dInactBackColor,  --background color when inactive
-    disBColor = dDisBackColor,      --background color when disabled
-    blinkColor = dBlinkColor,       --background color when button blink
-    state = active,                 --possible states: active, inactive, disabled
-    isBlink = false                 --if the button blink when clicked
+    label = "button",  --text displayed on the button
+    width = 0,         --can't be smaller then label
+    x = 1,
+    y = 1,
+    activeTextColor = defaultTextColor,
+    inactiveTextColor = defaultTextColor,
+    disabledTextColor = defaultTextColor,
+    activeBackgroundColor = defaultActiveBackgroundColor,
+    inactiveBackgroundColor = defaultInactiveBackgroundColor,
+    disabledBackgroundColor = defaultDisabledBackgroundColor,
+    blinkColor = defaultBlinkColor,  --background color when button blink
+    state = active,                  --possible states: active, inactive, disabled
+    isBlink = false                  --if the button blink when clicked
 }
 
 --- Create a new button with default values and return it.
@@ -144,96 +144,96 @@ end
 ---@param color number The color to set the text to
 function button:setTextColor(color)
     expect(1, color, "number")
-    self.actTColor = color
-    self.inactTColor = color
-    self.disTColor = color
+    self.activeTextColor = color
+    self.inactiveTextColor = color
+    self.disabledTextColor = color
 end
 
 --- Set the text color for the active state.
 ---@param color number The color to set the text to
 function button:setActiveTextColor(color)
     expect(1, color, "number")
-    self.actTColor = color
+    self.activeTextColor = color
 end
 
 --- Returns the current text color for the active state of the button.
 ---@return number The current text color for the active state
 function button:getActiveTextColor()
-    return self.actTColor
+    return self.activeTextColor
 end
 
 --- Set the text color for the inactive state.
 ---@param color number The color to set the text to
 function button:setInactiveTextColor(color)
     expect(1, color, "number")
-    self.inactTColor = color
+    self.inactiveTextColor = color
 end
 
 --- Returns the current text color for the inactive state of the button.
 ---@return number The current text color for the inactive state
 function button:getInactiveTextColor()
-    return self.inactTColor
+    return self.inactiveTextColor
 end
 
 --- Set the text color for the disabled state.
 ---@param color number The color to set the text to
 function button:setDisabledTextColor(color)
     expect(1, color, "number")
-    self.disTColor = color
+    self.disabledTextColor = color
 end
 
 --- Returns the current text color for the disabled state of the button.
 ---@return number The current text color for the disabled state
 function button:getDisabledTextColor()
-    return self.disTColor
+    return self.disabledTextColor
 end
 
 --- Set the same background color for all states.
 ---@param color number The color to set the background to
 function button:setBackgroundColor(color)
     expect(1, color, "number")
-    self.actBColor = color
-    self.inactBColor = color
-    self.disBColor = color
+    self.activeBackgroundColor = color
+    self.inactiveBackgroundColor = color
+    self.disabledBackgroundColor = color
 end
 
 --- Set the background color for the active state.
 ---@param color number The color to set the background to
 function button:setActiveBackgroundColor(color)
     expect(1, color, "number")
-    self.actBColor = color
+    self.activeBackgroundColor = color
 end
 
 --- Returns the current background color for the active state of the button.
 ---@return number The current background color for the active state
 function button:getActiveBackgroundColor()
-    return self.actBColor
+    return self.activeBackgroundColor
 end
 
 --- Set the background color for the inactive state.
 ---@param color number The color to set the background to
 function button:setInactiveBackgroundColor(color)
     expect(1, color, "number")
-    self.inactBColor = color
+    self.inactiveBackgroundColor = color
 end
 
 --- Returns the current background color for the inactive state of the button.
 ---@return number The current background color for the inactive state
 function button:getInactiveBackgroundColor()
-    return self.inactBColor
+    return self.inactiveBackgroundColor
 end
 
 --- Set the background color for the disabled state.
 ---@param color number The color to set the background to
 function button:setDisabledBackgroundColor(color)
     expect(1, color, "number")
-    self.disBColor = color
+    self.disabledBackgroundColor = color
 end
 
 --- Returns the current background color for the disabled state of the button.
 ---@return number The current background color for the disabled state
 function button:getDisabledBackgroundColor()
-    return self.disBColor
+    return self.disabledBackgroundColor
 end
 
 --- Set if the button should blink when clicked.
@@ -267,24 +267,24 @@ end
 --- cursor return where it was before drawing the button.
 function button:paint()
     --Store current text and background color for later
-    local cText = term.getTextColor()
-    local cBack = term.getBackgroundColor()
+    local currentTextColor = term.getTextColor()
+    local currentBackgroundColor = term.getBackgroundColor()
     --Store current cursor position for later
-    local cX, cY = term.getCursorPos()
+    local currentX, currentY = term.getCursorPos()
 
     if self.width < #self.label or self.width <= 0 then
         self.width = #self.label
     end
     --set text and background color based on current state
     if self.state == active then
-        term.setBackgroundColor(self.actBColor)
-        term.setTextColor(self.actTColor)
+        term.setBackgroundColor(self.activeBackgroundColor)
+        term.setTextColor(self.activeTextColor)
     elseif self.state == inactive then
-        term.setBackgroundColor(self.inactBColor)
-        term.setTextColor(self.inactTColor)
+        term.setBackgroundColor(self.inactiveBackgroundColor)
+        term.setTextColor(self.inactiveTextColor)
     elseif self.state == disabled then
-        term.setBackgroundColor(self.disBColor)
-        term.setTextColor(self.disTColor)
+        term.setBackgroundColor(self.disabledBackgroundColor)
+        term.setTextColor(self.disabledTextColor)
     end
     --Draw the button
     term.setCursorPos(self.x, self.y)
@@ -301,23 +301,23 @@ function button:paint()
         term.write(self.label)
     end
     --Restore the previous terminal status
-    term.setTextColor(cText)
-    term.setBackgroundColor(cBack)
-    term.setCursorPos(cX, cY)
+    term.setTextColor(currentTextColor)
+    term.setBackgroundColor(currentBackgroundColor)
+    term.setCursorPos(currentX, currentY)
 end
 
 --- Make the button blink. This function is called by [button:waitForClick]
 --- if [button:setBlinking] is set to true.
 function button:blink()
     local blinkColor = self.blinkColor
-    local cBack = nil
+    local currentBackgroundColor = nil
     if self:doesBlink() then
         if self.state == active then
-            cBack = self.actBColor
+            currentBackgroundColor = self.activeBackgroundColor
         elseif self.state == inactive then
-            cBack = self.inactBColor
+            currentBackgroundColor = self.inactiveBackgroundColor
         elseif self.state == disabled then
-            cBack = self.disBColor
+            currentBackgroundColor = self.disabledBackgroundColor
         end
 
         if self.state == active then
@@ -332,11 +332,11 @@ function button:blink()
         sleep(0.15)
 
         if self.state == active then
-            self:setActiveBackgroundColor(cBack)
+            self:setActiveBackgroundColor(currentBackgroundColor)
         elseif self.state == inactive then
-            self:setInactiveBackgroundColor(cBack)
+            self:setInactiveBackgroundColor(currentBackgroundColor)
         elseif self.state == disabled then
-            self:setDisabledBackgroundColor(cBack)
+            self:setDisabledBackgroundColor(currentBackgroundColor)
         end
 
         self:paint()
@@ -348,17 +348,17 @@ end
 --- terminal to delete the button.
 function button:clear()
     local background = term.getBackgroundColor()
-    local cText = nil
-    local cBack = nil
+    local currentTextColor = nil
+    local currentBackgroundColor = nil
     if self.state == active then
-        cText = self.actTColor
-        cBack = self.actBColor
+        currentTextColor = self.activeTextColor
+        currentBackgroundColor = self.activeBackgroundColor
     elseif self.state == inactive then
-        cText = self.inactTColor
-        cBack = self.inactBColor
+        currentTextColor = self.inactiveTextColor
+        currentBackgroundColor = self.inactiveBackgroundColor
     elseif self.state == disabled then
-        cText = self.disTColor
-        cBack = self.disBColor
+        currentTextColor = self.disabledTextColor
+        currentBackgroundColor = self.disabledBackgroundColor
     end
 
     if self.state == active then
@@ -375,14 +375,14 @@ function button:clear()
     self:paint()
 
     if self.state == active then
-        self:setActiveTextColor(cText)
-        self:setActiveBackgroundColor(cBack)
+        self:setActiveTextColor(currentTextColor)
+        self:setActiveBackgroundColor(currentBackgroundColor)
     elseif self.state == inactive then
-        self:setInactiveTextColor(cText)
-        self:setInactiveBackgroundColor(cBack)
+        self:setInactiveTextColor(currentTextColor)
+        self:setInactiveBackgroundColor(currentBackgroundColor)
     elseif self.state == disabled then
-        self:setDisabledTextColor(cText)
-        self:setDisabledBackgroundColor(cBack)
+        self:setDisabledTextColor(currentTextColor)
+        self:setDisabledBackgroundColor(currentBackgroundColor)
     end
 end
 
