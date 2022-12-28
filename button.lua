@@ -1,5 +1,5 @@
 --Button making API by Miki_Tellurium
---Version 1.0
+--Version: 1.0.0
 local expect = require("cc.expect")
 local expect = expect.expect
 
