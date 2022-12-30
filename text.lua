@@ -1,5 +1,5 @@
 --API for writing text by Miki_Tellurium
---v1.0
+--Version: 1.0.0
 
 --- Simple API to write fast monochromatic text
 ---@class text

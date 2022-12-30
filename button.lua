@@ -66,6 +66,9 @@ end
 function button:setLabel(text)
     expect(1, text, "string")
     self.label = tostring(text)
+    if self.width < #self.label or self.width <= 0 then
+        self.width = #self.label
+    end
 end
 
 --- Returns the label of the button.
