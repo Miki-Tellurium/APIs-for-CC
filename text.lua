@@ -1,9 +1,9 @@
---API for writing text by Miki_Tellurium
---Version: 1.0.0
+-- API for writing text by Miki_Tellurium
+-- Version: 1.0.0
 
 --- Simple API to write fast monochromatic text
 ---@class text
-text={}
+text = {}
 
 --- Print a line and then move cursor to next line
 ---@param text string The text to write
@@ -44,7 +44,7 @@ function text.println(text, xPos, yPos, textColor, backgroundColor)
  term.setBackgroundColor(dBack)
 end
 
---- Print a line and move the cursor at the wnd of the written text
+--- Print a line and move the cursor at the end of the written text
 ---@param text string The text to write
 ---@param xPos number The x coordinate of the text
 ---@param yPos number The y coordinate of the text
